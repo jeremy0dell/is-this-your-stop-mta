@@ -1,0 +1,18 @@
+#app {
+  /* display: grid;
+  grid-template: 1fr 1fr / 1fr; */
+
+  background-color: #2b2b2b;
+  color: white;
+}
+
+#map {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+#train {
+  /* border-top: 1px solid white; */
+  height: 0px;
+  background-color: #3c2a13;
+}
