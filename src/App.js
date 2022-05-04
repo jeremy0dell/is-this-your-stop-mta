@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import cloneDeep from "lodash/cloneDeep"
 import * as d3 from 'd3'
 import { Scrollama, Step } from 'react-scrollama'
@@ -7,7 +7,6 @@ import useWindowSize from './hooks/useWindowSize';
 
 import TrainChart from './components/TrainChart';
 import MapChart from './components/MapChart';
-import Map from './components/Map';
 
 import {
   createGridTrain,

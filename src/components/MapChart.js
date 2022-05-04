@@ -4,12 +4,11 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
 import * as d3 from 'd3'
 import * as C from '../logic/constants'
 
-import { stops, raceColors, yDomains, chartSeries, chartTypeInfo } from '../logic/data'
+import { stops, chartSeries, chartTypeInfo } from '../logic/data'
 
 
 const stripMapColor = (curr, i) => {
@@ -76,8 +75,6 @@ const MapChart = ({
 
   // add axis
   useEffect(() => {
-    const series = chartSeries(chartTypeInfo[currentMapChart].keys, stacks[currentMapChart])
-    // console.log('hello', d3.max(series, layer => d3.max(layer, sequence => sequence[1])))
     var y = d3.scaleLinear()
       .domain([0, C.maxOccupancy])
       .range([dimensions.barHeight, 0]);
