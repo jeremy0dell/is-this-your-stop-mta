@@ -32,6 +32,7 @@ function App() {
   const [peopleTotal, setPeopleTotal] = useState([])
   // map state
   const [currentMapChart, setCurrentMapChart] = useState(C.race)
+  const [currentMapType, setCurrentMapType] = useState(C.standard)
   // orchestration
   const [isMoving, setIsMoving] = useState(false)
   // scrolly
@@ -136,10 +137,10 @@ function App() {
     const train = d3.select('#train')
 
     map.transition().duration(1500)
-      .style('height', '50vh')
+      .style('height', '55vh')
 
     train.transition().duration(1500)
-      .style('height', '50vh')
+      .style('height', '45vh')
 
     map.style('overflow-y', 'hidden')
   }
@@ -184,7 +185,7 @@ function App() {
 
   // scrolly
   const onStepEnter = ({ data }) => {
-    console.log('entered steop', data)
+    console.log('entered step', data)
     setCurrentStepIndex(data);
   };
 
@@ -197,10 +198,10 @@ function App() {
       >
         <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <h1 style={{ fontSize: 100 }}>
-            Transit Meditations
+            Is This Your Stop?
           </h1>
           <h2 style={{ fontSize: 60 }}>
-            Subtitle Pending
+            How Data Drives The MTA
           </h2>
         </div>
         {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -247,6 +248,8 @@ function App() {
           isMoving={isMoving}
           currentMapChart={currentMapChart}
           setCurrentMapChart={setCurrentMapChart}
+          currentMapType={currentMapType}
+          setCurrentMapType={setCurrentMapType}
         />}
       </div>
       <div id="train" style={{ height: '0vh' }}>

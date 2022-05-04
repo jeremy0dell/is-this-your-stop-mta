@@ -603,6 +603,7 @@ export const enterFn = (enter, chartType) => enter
     .attr('cy', introduceNoise(C.height * C.squareSize + C.squareSize))
     .attr('r', C.squareSize / 3)
     .attr('fill', d => chartTypeInfo[chartType].colors(d[chartType]))
+    .attr('stroke', 'black')
     .attr('opacity', 0)
   .transition()
   .duration(250)
@@ -647,11 +648,28 @@ export const updateFn = update => update
 
 // map chart handlers
 
-export const chartSeries = (keys, stack) => {
+export const chartSeries = (keys, stack, isProp) => {
   const stacked = d3.stack()
     .keys(keys)
 
-  const series = stacked(stack)
+  
+  if (isProp) {
+    stack = stack.map((group, i) => {
+      // i is equal to stop
+      var sum = Object.values(group).reduce((acc, next) => acc + next, 0) - i
+      var proportion = C.maxOccupancy / sum
+
+      var entries = Object.entries(group).map(entry => {
+        entry[1] = entry[0] === 'stop' ? entry[1] : entry[1] * proportion
+        return entry
+      })
+      return Object.fromEntries(entries)
+    })
+    console.log('hi test', stack)
+  }
+
+  var series = stacked(stack)
+
 
   return series
 }
@@ -672,12 +690,21 @@ export const chartTypeInfo = {
   race: {
     colors: raceColors,
     keys: C.raceKeys,
+    shortKeys: C.shortRaceKeys,
+    axisTitle: type => type === C.standard ? 'Amount of People by Race' : 'Proportion of People by Race'
     
   },
   income: {
     colors: incomeColors,
-    keys: C.incomeKeys
+    keys: C.incomeKeys,
+    shortKeys: C.shortIncomeKeys,
+    axisTitle: type => type === C.standard ? 'Amount of People by Income' : 'Proportion of People by Income'
   }
+}
+
+export const yDomains = {
+  standard: () => ([0, C.maxOccupancy]),
+  proportional: people => ([0, people.length])
 }
 
 export const transitionColors = (selection, chartType) => selection

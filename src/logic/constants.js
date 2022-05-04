@@ -18,6 +18,9 @@ export const board = 'board'
 export const race = 'race'
 export const income = 'income'
 
+export const standard = 'standard'
+export const proportional = 'proportional'
+
 // MapChart
 // too verbose
 export const raceKeys = [
@@ -64,6 +67,19 @@ export const incomeKeys = [
   '$150,000 to $199,999',
   '$200,000 or more'
 ]
+
+export const shortIncomeKeys = {
+  'Less than $10,000': '<$10,000',
+  '$10,000 to $14,999': '$10,000-$14,999',
+  '$15,000 to $24,999': '$15,000-$24,999',
+  '$25,000 to $34,999': '$25,000-$34,999',
+  '$35,000 to $49,999': '$35,000-$49,999',
+  '$50,000 to $74,999': '$50,000-$74,999',
+  '$75,000 to $99,999': '$75,000-$99,999',
+  '$100,000 to $149,999': '$100,000-$149,999',
+  '$150,000 to $199,999': '$150,000-$199,999',
+  '$200,000 or more': '>$200,000',
+}
 
 export const emptyIncomes = {
   'Less than $10,000': 0,

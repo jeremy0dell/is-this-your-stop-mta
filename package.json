@@ -1,7 +1,7 @@
 {
   "name": "app-v1",
   "version": "0.1.0",
-  "homepage": "https://jeremy0dell.github.io/major-studio-2",
+  "homepage": "https://jeremy0dell.github.io/is-this-your-stop-mta",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",

@@ -9,7 +9,7 @@ import FormLabel from '@mui/material/FormLabel';
 import * as d3 from 'd3'
 import * as C from '../logic/constants'
 
-import { stops, raceColors, chartSeries, chartTypeInfo } from '../logic/data'
+import { stops, raceColors, yDomains, chartSeries, chartTypeInfo } from '../logic/data'
 
 
 const stripMapColor = (curr, i) => {
@@ -45,9 +45,9 @@ const ArrowText = ({ step }) =>
     fill="white"
     fontSize="20px"
     fontFamily="Helvetica"
-    transform="translate(-25 0)"
+    transform="translate(-25 -10)"
   >
-    { step === 0 ? 'Begin Simulation' : 'Go to Next Station' }
+    { step === 0 ? 'Begin Simulation' : 'Travel to Next Station' }
   </text>
 
 
@@ -63,10 +63,13 @@ const MapChart = ({
   stepHandlers,
   isMoving,
   currentMapChart,
-  setCurrentMapChart
+  setCurrentMapChart,
+  currentMapType,
+  setCurrentMapType
 }) => {
   const [step, setStep] = useState(0)
-  const [value, setValue] = useState(currentMapChart);
+  const [value, setValue] = useState(currentMapChart)
+  const [type, setType] = useState(currentMapType)
 
   // const [isGlowing, setIsGlowing] = useState(true)
   const circlesRef = useRef(null)
@@ -81,17 +84,24 @@ const MapChart = ({
 
     var axis = d3.axisLeft(y)
 
-
-    console.log('testing', axis)
-
     if (circlesRef.current) {
       // add axis
       d3.select(circlesRef.current)
         .append('g')
         .attr('class', 'axis')
         .attr('transform', `translate(0, -${dimensions.barHeight})`)
+        .attr('opacity', 0)
         .call(axis)
 
+        // add label
+      d3.select(circlesRef.current)
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', `translate(-50, -${dimensions.barHeight - 225}) rotate(-90)`)
+        .attr('fill', 'white')
+        .attr('opacity', 0)
+        .text(chartTypeInfo[currentMapChart].axisTitle(currentMapType))
+      
       // add legend
       d3.select(circlesRef.current)
         .append('g')
@@ -108,22 +118,28 @@ const MapChart = ({
               .append('rect')
                 .attr('width', 15)
                 .attr('height', 15)
-                .attr('x', (_, i) => (i + 1) * 150)
-                .attr('y', dimensions.barHeight * -1 - 50)
+                .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing : (i) * dimensions.legendSpacing)
+                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 25 : dimensions.barHeight * -1 - 50)
                 .attr('fill', d => chartTypeInfo[currentMapChart].colors(d))
 
             selection
               .append('text')
-                .attr('x', (_, i) => (i + 1) * 150 + 20)
-                .attr('y', dimensions.barHeight * -1 - 35)
+                .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
+                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 10 : dimensions.barHeight * -1 - 35)
                 .attr('fill', 'white')
-                // .attr('transform', (d, i) => `translate(${(i + 1) * 150},${dimensions.barHeight * -1 - 20}) rotate(20)`)
-                // .attr('transform', (d, i) => `translate(${(i + 1) * 150},${dimensions.barHeight * -1 - 50}) rotate(45)`)
-                .text(d => C.shortRaceKeys[d])
+                .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
 
             return selection
           }
         )
+        
+        d3.select('g.legend')
+          .attr('opacity', 0)
+
+        
+        d3.select('foreignObject#controls')
+          .attr('opacity', 0)
+
     }
 
   }, [])
@@ -133,20 +149,23 @@ const MapChart = ({
     var axis = d3.axisLeft(y)
 
     if (action === C.board) {
-      console.log(currentMapChart)
-      const series = chartSeries(chartTypeInfo[currentMapChart].keys, stacks[currentMapChart])
-      // console.log('hello', d3.max(series, layer => d3.max(layer, sequence => sequence[1])))
+
+      /*******ON FIRST BOARD*******/
+      if (step === 2) {
+        // bring in g.axis, text.label
+        showElement('g.axis')
+        showElement('text.label')
+        showElement('g.legend')
+        showElement('foreignObject#controls')
+      }
+      /*******END ON FIRST BOARD*******/
+      var series = chartSeries(chartTypeInfo[currentMapChart].keys, stacks[currentMapChart], currentMapType === C.proportional)
+
       var y = d3.scaleLinear()
         .domain([0, C.maxOccupancy])
         .range([dimensions.barHeight, 0]);
-  
-      // const stacked = d3.stack()
-      //   .keys(C.raceKeys)
-
-      // const series = stacked(raceStack)
 
       if (circlesRef.current) {
-
         // eslint-disable-next-line
         const selection = d3.select(circlesRef.current)
           .selectAll('g.bar')
@@ -180,7 +199,7 @@ const MapChart = ({
               .transition()
               .duration(1000)
               .delay(2200)
-              .attr('height', d =>{ console.log(d, y); return y(d[0]) - y(d[1])})
+              .attr('height', d =>{ return y(d[0]) - y(d[1])})
               .attr('y', (d, i) => y(d[1]) - dimensions.barHeight),
             update => update
               .transition()
@@ -201,10 +220,10 @@ const MapChart = ({
   }, [people])
 
   useEffect(() => {
-    const series = chartSeries(chartTypeInfo[currentMapChart].keys, stacks[currentMapChart])
-    // console.log('hello', d3.max(series, layer => d3.max(layer, sequence => sequence[1])))
+    var series = chartSeries(chartTypeInfo[currentMapChart].keys, stacks[currentMapChart], currentMapType === C.proportional)
+
     var y = d3.scaleLinear()
-      .domain([0, 180])
+      .domain([0, C.maxOccupancy])
       .range([dimensions.barHeight, 0]);
 
     if (circlesRef.current) {
@@ -261,35 +280,71 @@ const MapChart = ({
             .remove()
         )
 
-      // update legend
-      d3.select(circlesRef.current)
-        .selectAll('g.legend-marker')
-        .data(chartTypeInfo[currentMapChart].keys)
-        .join(
-          enter => enter,
-          update => {
-          d3.select(circlesRef.current)
-            .append('g')
-            .attr('class', 'legend')
-            .selectAll('g')
-            .data(chartTypeInfo[currentMapChart].keys)
-            .join()
+      if (step >= 2) {
+        d3.select('g.legend')
+          .remove()
 
-          }
-        )
-    
+        d3.select(circlesRef.current)
+          .append('g')
+          .attr('class', 'legend')
+          .selectAll('g')
+          .data(chartTypeInfo[currentMapChart].keys)
+          .join(
+            enter => {
+              const selection = enter
+                .append('g')
+                  .attr('class', 'legend-marker')
+                
+              selection
+                .append('rect')
+                  .attr('width', 15)
+                  .attr('height', 15)
+                  .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing : (i) * dimensions.legendSpacing)
+                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 25 : dimensions.barHeight * -1 - 50)
+                  .attr('fill', d => chartTypeInfo[currentMapChart].colors(d))
+
+              selection
+                .append('text')
+                  .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
+                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 10 : dimensions.barHeight * -1 - 35)
+                  .attr('fill', 'white')
+                  .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
+
+              return selection
+            }
+          )
+
+        d3.selectAll('text.label')
+          .remove()
+
+        var a = d3.select(circlesRef.current)
+          .append('text')
+          .attr('class', 'label')
+          .attr('transform', `translate(-50, -${dimensions.barHeight - 225}) rotate(-90)`)
+          .attr('fill', 'white')
+          .text(chartTypeInfo[currentMapChart].axisTitle(currentMapType))
+
+        console.log('do we have a', a)
+      }
+
     }
-  }, [currentMapChart])
+  }, [currentMapChart, currentMapType])
+
+  useEffect(() => {
+
+  }, [currentMapType])
+
   const dimensions = {
     height: 40,
     width: width * 0.8,
     paddingSides: 15,
-    barHeight: 40 * 6
+    barHeight: 40 * 6,
+    legendSpacing: 120
   }
 
   const margins = {
     top: dimensions.height * 8,
-    left: width * 0.1
+    left: width * 0.175
   }
 
   const stacks = {
@@ -311,6 +366,12 @@ const MapChart = ({
     setStep(step + 1)
   }
 
+  const showElement = selection => d3.select(selection)
+    .transition()
+    .duration(1000)
+    .delay(2000)
+    .attr('opacity', 1)
+
   const stopCircs = stops.map((stop, i) =>
     <React.Fragment key={stop[0]}>
       <circle
@@ -330,21 +391,32 @@ const MapChart = ({
     </React.Fragment>
   )
 
-  const handleChange = (event) => {
+  const handleMapChange = (event) => {
     setValue(event.target.value)
     setCurrentMapChart(event.target.value)
+  }
+
+  const handleTypeChange = (event) => {
+    setType(event.target.value)
+    setCurrentMapType(event.target.value)
   }
   return (
     <>
       <svg height={height} width={width}>
-      <foreignObject x={width - 200} y="50" width="700" height="200">
-        <FormControl sx={{ marginLeft: '20px' }}>
-          <RadioGroup value={value} onChange={handleChange}>
-            <FormControlLabel value={C.race} control={<Radio sx={whiteStyle} />} label="Race" />
-            <FormControlLabel value={C.income} control={<Radio sx={whiteStyle} />} label="Income" />
-          </RadioGroup>
-        </FormControl>
-      </foreignObject>
+        <foreignObject id="controls" x={width - 250} y="50" width="700" height="200">
+          <FormControl sx={{ }}>
+            <RadioGroup value={value} onChange={handleMapChange}>
+              <FormControlLabel value={C.race} control={<Radio sx={whiteStyle} />} label="Race" />
+              <FormControlLabel value={C.income} control={<Radio sx={whiteStyle} />} label="Income" />
+            </RadioGroup>
+          </FormControl>
+          <FormControl sx={{ }}>
+            <RadioGroup value={type} onChange={handleTypeChange}>
+              <FormControlLabel value={C.standard} control={<Radio sx={whiteStyle} />} label="Standard" />
+              <FormControlLabel value={C.proportional} control={<Radio sx={whiteStyle} />} label="Proportional" />
+            </RadioGroup>
+          </FormControl>
+        </foreignObject>
         <g transform={`translate(${margins.left * 0.25},${margins.top})`} ref={circlesRef}>
           <rect
             width={dimensions.width + dimensions.paddingSides * 4}
