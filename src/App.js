@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import cloneDeep from "lodash/cloneDeep"
 import * as d3 from 'd3'
 import { Scrollama, Step } from 'react-scrollama'
@@ -7,6 +7,7 @@ import useWindowSize from './hooks/useWindowSize';
 
 import TrainChart from './components/TrainChart';
 import MapChart from './components/MapChart';
+import Map from './components/Map';
 
 import {
   createGridTrain,
@@ -36,6 +37,7 @@ function App() {
   const [isMoving, setIsMoving] = useState(false)
   // scrolly
   const [currentStepIndex, setCurrentStepIndex] = useState(null);
+  const imgRef = useRef(null);
   // specific charts
   const [genderStack, setGenderStack] = useState([])
   const [raceStack, setRaceStack] = useState([])
@@ -195,27 +197,37 @@ function App() {
         style={{ height: '100vh' }}
       // className={'flex-column'}
       >
-        <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <h1 style={{ fontSize: 100 }}>
             Is This Your Stop?
           </h1>
           <h2 style={{ fontSize: 60 }}>
             How Data Drives The MTA
           </h2>
-        </div>
+        </div> */}
         {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <img style={{ height: '100%' }} src={transit} />
         </div> */}
-        <div style={{ fontFamily: "'Helvetica'", backgroundColor: 'darkgrey', height: 900* 5, display: 'flex', flexDirection: 'column', alignItems: 'end', justifyContent: 'center' }}>
-          <div style={{ position: 'sticky', height: '100vh', width: '100vw', top: 0 }}>
-            <img style={{ height: '100%' }} src={curve} />
+        <div style={{ fontFamily: "'Helvetica'", backgroundColor: 'darkgrey', display: 'flex', flexDirection: 'column', alignItems: 'end', justifyContent: 'center' }}>
+          <div style={{ position: 'sticky', height: '100vh', width: '100vw', top: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img ref={imgRef} id="map-img" style={{ height: '100%' }} src={curve} />
+            <div style={{ padding: 30, textAlign: 'center' }}>
+              <h1 style={{ fontSize: 100 }}>
+                Is This Your Stop?
+              </h1>
+              <h2 style={{ fontSize: 60 }}>
+                How Data Drives The MTA
+              </h2>
+            </div>
           </div>
-          <Scrollama offset={0.5} onStepEnter={onStepEnter}>
+          <Scrollama offset={0} onStepEnter={onStepEnter}>
             {[1, 2, 3, 4, 5].map((_, stepIndex) => (
               <Step data={stepIndex} key={stepIndex}>
                 <div
                   style={{
                     height: '900px',
+                    width: imgRef.current ? window.innerWidth - imgRef.current.offsetWidth : 0,
+                    backgroundColor: 'grey',
                     // border: '1px solid gray',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                     zIndex: 10
@@ -258,7 +270,6 @@ function App() {
           people={peopleBoarded}
           currentMapChart={currentMapChart}
         />}
-        <div id="train-tooltip"></div>
       </div>
     </div>
   );
