@@ -52,7 +52,7 @@ export function bind_trailing_args(fn, ...bound_args) {
 }
 
 export const introduceNoise = num => {
-  var noise = (num / 93) * Math.random()
+  var noise = (num / 90) * Math.random()
   var sign = Math.random() > 0.5 ? -1 : 1
   
   return num + (noise * sign)

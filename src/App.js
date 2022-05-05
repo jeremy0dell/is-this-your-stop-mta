@@ -258,6 +258,7 @@ function App() {
           people={peopleBoarded}
           currentMapChart={currentMapChart}
         />}
+        <div id="train-tooltip"></div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
 
 import * as d3 from 'd3'
 import * as C from '../logic/constants'
@@ -23,9 +24,17 @@ const stripMapColor = (curr, i) => {
 
 const whiteStyle = {
   color: 'white',
+  fontSize: '22px !important',
   '&.Mui-checked': {
     color: 'white',
+    fontSize: '22px !important',
   },
+  '&.MuiFormControlLabel-label': {
+    fontSize: '22px !important',
+  },
+  '& span': {
+    fontSize: '22px !important',
+  }
 }
 
 const ArrowPath = ({ transform, isGlowing }) =>
@@ -103,6 +112,7 @@ const MapChart = ({
       d3.select(circlesRef.current)
         .append('g')
         .attr('class', 'legend')
+        .attr('transform', 'translate(0, -26)')
         .selectAll('g')
         .data(chartTypeInfo[currentMapChart].keys)
         .join(
@@ -124,6 +134,7 @@ const MapChart = ({
                 .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
                 .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 10 : dimensions.barHeight * -1 - 35)
                 .attr('fill', 'white')
+                .attr('font-size', '22px')
                 .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
 
             return selection
@@ -188,8 +199,8 @@ const MapChart = ({
           .join(
             enter => enter.append('rect')
               .attr('class', 'bar-rect')
-              .attr('x', (d, i, a) => (dimensions.width / stops.length) * (i + 1) - 40 + dimensions.paddingSides * 1.5)
-              .attr('width', 30)
+              .attr('x', (d, i, a) => (dimensions.width / stops.length) * (i + 1) - 46 + dimensions.paddingSides * 1.5)
+              .attr('width', 42)
               .attr('height', 0)
               .attr('y', 0)
               // transition stuff
@@ -251,8 +262,8 @@ const MapChart = ({
         .join(
           enter => enter.append('rect')
             .attr('class', 'bar-rect')
-            .attr('x', (d, i, a) => (dimensions.width / stops.length) * (i + 1) - 40 + dimensions.paddingSides * 1.5)
-            .attr('width', 30)
+            .attr('x', (d, i, a) => (dimensions.width / stops.length) * (i + 1) - 46 + dimensions.paddingSides * 1.5)
+            .attr('width', 42)
             .attr('height', 0)
             .attr('y', 0)
             // transition stuff
@@ -284,6 +295,7 @@ const MapChart = ({
         d3.select(circlesRef.current)
           .append('g')
           .attr('class', 'legend')
+          .attr('transform', 'translate(0, -26)')
           .selectAll('g')
           .data(chartTypeInfo[currentMapChart].keys)
           .join(
@@ -305,6 +317,7 @@ const MapChart = ({
                   .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
                   .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 10 : dimensions.barHeight * -1 - 35)
                   .attr('fill', 'white')
+                  .attr('font-size', '22px')
                   .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
 
               return selection
@@ -340,7 +353,7 @@ const MapChart = ({
   }
 
   const margins = {
-    top: dimensions.height * 8,
+    top: dimensions.height * 9,
     left: width * 0.175
   }
 
@@ -379,7 +392,7 @@ const MapChart = ({
       />
       <text
         fill="white"
-        fontSize="20px"
+        fontSize="22px"
         fontFamily="Helvetica"
         transform={`translate(${((dimensions.width / stops.length) * (i + 1) - 30) + dimensions.paddingSides * 1.5},${dimensions.height + 15}) rotate(45)`}
       >
@@ -400,17 +413,21 @@ const MapChart = ({
   return (
     <>
       <svg height={height} width={width}>
-        <foreignObject id="controls" x={width - 250} y="50" width="700" height="200">
-          <FormControl sx={{ }}>
+        <foreignObject style={{ fontSize: 22 }} id="controls" x={width - 275} y="50" width="700" height="200">
+          <FormControl sx={{ fontSize: '22px  !important' }}>
             <RadioGroup value={value} onChange={handleMapChange}>
-              <FormControlLabel value={C.race} control={<Radio sx={whiteStyle} />} label="Race" />
-              <FormControlLabel value={C.income} control={<Radio sx={whiteStyle} />} label="Income" />
+              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.race} control={<Radio sx={whiteStyle} />}
+                label={<Typography style={{ fontSize: 22 }}>Race</Typography>}/>
+              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.income} control={<Radio sx={whiteStyle} />}
+                label={<Typography style={{ fontSize: 22 }}>Income</Typography>}/>
             </RadioGroup>
           </FormControl>
-          <FormControl sx={{ }}>
+          <FormControl sx={{ fontSize: '22px  !important' }}>
             <RadioGroup value={type} onChange={handleTypeChange}>
-              <FormControlLabel value={C.standard} control={<Radio sx={whiteStyle} />} label="Standard" />
-              <FormControlLabel value={C.proportional} control={<Radio sx={whiteStyle} />} label="Proportional" />
+              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.standard} control={<Radio sx={whiteStyle} />}
+                label={<Typography style={{ fontSize: 22 }}>Standard</Typography>}/>
+              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.proportional} control={<Radio sx={whiteStyle} />}
+                label={<Typography style={{ fontSize: 22 }}>Proportional</Typography>}/>
             </RadioGroup>
           </FormControl>
         </foreignObject>
