@@ -26,7 +26,7 @@ const whiteStyle = {
   color: 'white',
   fontSize: '22px !important',
   '&.Mui-checked': {
-    color: 'white',
+    color: '#FF9C28',
     fontSize: '22px !important',
   },
   '&.MuiFormControlLabel-label': {
@@ -89,25 +89,46 @@ const MapChart = ({
       .domain([0, C.maxOccupancy])
       .range([dimensions.barHeight, 0]);
 
+    var yProp = d3.scaleLinear()
+      .domain([0, 100])
+      .range([dimensions.barHeight, 0]);
+
+    var formatPercent = d3.format(".0%");
+
+
     var axis = d3.axisLeft(y)
+    var axisProp = d3.axisLeft(yProp).tickFormat(formatPercent)
 
     if (circlesRef.current) {
       // add axis
       d3.select(circlesRef.current)
         .append('g')
         .attr('class', 'axis')
+        .style("font-size",20)
         .attr('transform', `translate(0, -${dimensions.barHeight})`)
         .attr('opacity', 0)
-        .call(axis)
+        .call(currentMapType === C.standard ? axis : axisProp)
+        .call(g => g.select(".domain").remove())
+
+      // // add prop axis
+      // d3.select(circlesRef.current)
+      //   .append('g')
+      //   .attr('class', 'axis')
+      //   .style("font-size",20)
+      //   .attr('transform', `translate(0, -${dimensions.barHeight})`)
+      //   .attr('opacity', 0)
+      //   .call(axis)
+      //   .call(g => g.select(".domain").remove())
 
         // add label
       d3.select(circlesRef.current)
         .append('text')
         .attr('class', 'label')
-        .attr('transform', `translate(-50, -${dimensions.barHeight - 225}) rotate(-90)`)
+        .attr('transform', `translate(-72, -${dimensions.barHeight - 225}) rotate(-90)`)
         .attr('fill', 'white')
         .attr('opacity', 0)
         .text(chartTypeInfo[currentMapChart].axisTitle(currentMapType))
+        .style("font-size",20)
       
       // add legend
       d3.select(circlesRef.current)
@@ -127,13 +148,13 @@ const MapChart = ({
                 .attr('width', 15)
                 .attr('height', 15)
                 .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing : (i) * dimensions.legendSpacing)
-                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 50 : dimensions.barHeight * -1 - 25)
+                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 60 : dimensions.barHeight * -1 - 25)
                 .attr('fill', d => chartTypeInfo[currentMapChart].colors(d))
 
             selection
               .append('text')
                 .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
-                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 35 : dimensions.barHeight * -1 - 10)
+                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 45 : dimensions.barHeight * -1 - 10)
                 .attr('fill', 'white')
                 .attr('font-size', '22px')
                 .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
@@ -310,13 +331,13 @@ const MapChart = ({
                   .attr('width', 15)
                   .attr('height', 15)
                   .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing : (i) * dimensions.legendSpacing)
-                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 50 : dimensions.barHeight * -1 - 25)
+                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 60 : dimensions.barHeight * -1 - 25)
                   .attr('fill', d => chartTypeInfo[currentMapChart].colors(d))
 
               selection
                 .append('text')
                   .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
-                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 35 : dimensions.barHeight * -1 - 10)
+                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 45 : dimensions.barHeight * -1 - 10)
                   .attr('fill', 'white')
                   .attr('font-size', '22px')
                   .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
@@ -331,9 +352,35 @@ const MapChart = ({
         var a = d3.select(circlesRef.current)
           .append('text')
           .attr('class', 'label')
-          .attr('transform', `translate(-50, -${dimensions.barHeight - 225}) rotate(-90)`)
+          .attr('transform', `translate(-72, -${dimensions.barHeight - 225}) rotate(-90)`)
           .attr('fill', 'white')
           .text(chartTypeInfo[currentMapChart].axisTitle(currentMapType))
+          .style("font-size",20)
+
+          var y = d3.scaleLinear()
+          .domain([0, C.maxOccupancy])
+          .range([dimensions.barHeight, 0]);
+    
+        var yProp = d3.scaleLinear()
+          .domain([0, 1])
+          .range([dimensions.barHeight, 0]);
+    
+        var formatPercent = d3.format(".0%");
+    
+        var axis = d3.axisLeft(y)
+        var axisProp = d3.axisLeft(yProp).tickFormat(formatPercent)
+    
+        d3.selectAll('g.axis')
+          .remove()
+
+        var b = d3.select(circlesRef.current)
+          .append('g')
+          .attr('class', 'axis')
+          .style("font-size",20)
+          .attr('transform', `translate(0, -${dimensions.barHeight})`)
+          .attr('opacity', 1)
+          .call(currentMapType === C.standard ? axis : axisProp)
+          .call(g => g.select(".domain").remove())
 
         console.log('do we have a', a)
       }
@@ -441,7 +488,7 @@ const MapChart = ({
             </RadioGroup>
           </FormControl> */}
         </foreignObject>
-        <g transform={`translate(${margins.left * 0.25},${margins.top})`} ref={circlesRef}>
+        <g transform={`translate(${margins.left * 0.28},${margins.top})`} ref={circlesRef}>
           <rect
             width={dimensions.width + dimensions.paddingSides * 4}
             height={dimensions.height}
@@ -464,7 +511,7 @@ const MapChart = ({
           {!isMoving ? <ArrowText step={step} /> : ''}
           <ArrowPath
             isGlowing={isMoving}
-            transform={`scale(1.25 1.25)`}
+            transform={`scale(1.5 1.5)`}
           />
         </g>
       </svg>

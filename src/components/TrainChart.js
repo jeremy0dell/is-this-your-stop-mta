@@ -52,9 +52,9 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
           .html(`
             <div style="height: 100%; width: 100%; background-color: #4d4d4d; border-radius: 10px;">
               <div style="height: 288px; font-size: 20px; padding: 16px; display: flex; flex-direction: column; justify-content: space-around; text-align: center;">
-<div style="margin-bottom: 12px">Race: <br /><span style="font-weight: bold;">${d.race}</div>
-<div style="margin-bottom: 12px">Income Bracket: <br /><span style="font-weight: bold;">${d.income}</div>
-<div style="margin-bottom: 12px">Entered at Stop: <br /><span style="font-weight: bold;">${stops[d.enter][0]}</div>
+<div style="margin-bottom: 12px">Race: <br /><span style="font-weight: bold; color: #FF9C28;">${d.race}</div>
+<div style="margin-bottom: 12px">Income Bracket: <br /><span style="font-weight: bold; color: #FF9C28;">${d.income}</div>
+<div style="margin-bottom: 12px">Entered at Stop: <br /><span style="font-weight: bold; color: #FF9C28;">${stops[d.enter][0]}</div>
               </div>
             </div>
           `)
@@ -108,7 +108,7 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
         width={4 * C.squareSize}
         height={6 * C.squareSize}
         opacity={0}
-        transform={`translate(${margin.left * 16.5} ${margin.top})`}
+        transform={`translate(${(C.width * C.squareSize) + (margin.left * 1.25)} ${margin.top})`}
       >
         <div style={{ height: '100%', width: '100%', backgroundColor: '#4d4d4d', borderRadius: 10 }}></div>
       </foreignObject>
