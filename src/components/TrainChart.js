@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 
 import { enterFn, updateFn, exitFn, transitionColors, stops } from "../logic/data"
 import * as C from '../logic/constants'
-import train from '../assets/images/grid.svg'
+import train from '../assets/images/grid-2.svg'
 import { bind_trailing_args } from "../logic/helpers"
 
 const TrainChart = ({ height, width, people, currentMapChart }) => {

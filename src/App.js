@@ -208,9 +208,10 @@ function App() {
         {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <img style={{ height: '100%' }} src={transit} />
         </div> */}
-        <div style={{ fontFamily: "'Helvetica'", backgroundColor: 'darkgrey', display: 'flex', flexDirection: 'column', alignItems: 'end', justifyContent: 'center' }}>
-          <div style={{ position: 'sticky', height: '100vh', width: '100vw', top: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img ref={imgRef} id="map-img" style={{ height: '100%' }} src={curve} />
+        {/* <div style={{ fontFamily: "'Helvetica'", backgroundColor: 'darkgrey', display: 'flex', flexDirection: 'column'}}>
+          <div style={{ position: 'absolute', top: 0 }}>hello</div>
+          <div style={{ position: 'absolute', height: '100vh', width: '100vw', top: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img ref={imgRef} id="map-img" style={{ height: '100%', width: '100%' }} src={curve} />
             <div style={{ padding: 30, textAlign: 'center' }}>
               <h1 style={{ fontSize: 100 }}>
                 Is This Your Stop?
@@ -225,29 +226,32 @@ function App() {
               <Step data={stepIndex} key={stepIndex}>
                 <div
                   style={{
-                    height: '900px',
-                    width: imgRef.current ? window.innerWidth - imgRef.current.offsetWidth : 0,
+                    height: 'calc(100vh - 40px)',
+                    width: '33%',
+                    margin: '20px 0px',
+                    opacity: '90%',
+                    borderRadius: 20,
+                    padding: 8,
+                    textAlign: 'center',
                     backgroundColor: 'grey',
-                    // border: '1px solid gray',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                     zIndex: 10
-                    // opacity: currentStepIndex === stepIndex ? 1 : 0.2,
                   }}
                 >
-                  <div style={{ height: 200, width: 200, border: '1px solid grey', backgroundColor: 'white', color: 'black', boxShadow: '10px 5px 5px black', marginRight: 50 }}>
-                    <p>This is text about the map</p>
-                    <p>The map will change on scroll</p>
-                    <p>This is my favorite map ever. map map map</p>
-                  </div>
+                  <h1 style={{ fontSize: 100 }}>
+                    Is This Your Stop?
+                  </h1>
+                  <h2 style={{ fontSize: 60 }}>
+                    How Data Drives The MTA
+                  </h2>
                 </div>
               </Step>
             ))}
           </Scrollama>
-          
-
-        </div>
+        </div> */}
         {windowSize.height && <MapChart
           height={'100%'}
+          opacity={1}
           width={windowSize.width}
           currentStop={currentStop}
           action={action}

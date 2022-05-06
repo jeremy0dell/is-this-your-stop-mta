@@ -42,7 +42,7 @@ const ArrowPath = ({ transform, isGlowing }) =>
     transform={transform}
     style={{
       // background: isGlowing ? '#FF9C28' : '',
-      filter: !isGlowing ? 'drop-shadow(0px 0px 4.63545px #FFAA33) drop-shadow(0px 0px 2.64883px #FFAA33) drop-shadow(0px 0px 1.54515px #FFAA33) drop-shadow(0px 0px 0.772575px #FFAA33) drop-shadow(0px 0px 0.220736px #FFAA33) drop-shadow(0px 0px 0.110368px #FFAA33)' : ''
+      filter: !isGlowing ? 'drop-shadow(rgb(255, 170, 51, 0.5) 0px 0px 0.6354499999999916px) drop-shadow(rgb(255, 170, 51, 0.5) 0px 0px 2.64883px) drop-shadow(rgb(255, 170, 51, 0.5) 0px 0px 1.54515px) drop-shadow(rgb(255, 170, 51) 0px 0px 0.772575px) drop-shadow(rgb(255, 170, 51) 0px 0px 0.220736px) drop-shadow(rgb(255, 170, 51, 0.5) 0px 0px 17.110368px)' : ''
     }}
     d="M39.4853 12.0238C38.9208 11.5325 38.0805 11.5325 37.516 12.0237L35.2762 13.9727C34.5895 14.5702 34.589 15.6368 35.2752 16.235L48.8614 28.0779C49.9066 28.989 49.2622 30.7087 47.8758 30.7087H14.334C13.5056 30.7087 12.834 31.3802 12.834 32.2087V34.792C12.834 35.6204 13.5056 36.292 14.334 36.292H47.8758C49.2622 36.292 49.9066 38.0117 48.8614 38.9227L35.2752 50.7657C34.589 51.3638 34.5895 52.4304 35.2762 53.028L37.516 54.9769C38.0805 55.4681 38.9208 55.4681 39.4853 54.9769L62.8668 34.6319C63.554 34.034 63.554 32.9666 62.8668 32.3687L39.4853 12.0238Z"
     fill="#FF9C28"
@@ -73,7 +73,8 @@ const MapChart = ({
   currentMapChart,
   setCurrentMapChart,
   currentMapType,
-  setCurrentMapType
+  setCurrentMapType,
+  opacity
 }) => {
   const [step, setStep] = useState(0)
   const [value, setValue] = useState(currentMapChart)
@@ -126,13 +127,13 @@ const MapChart = ({
                 .attr('width', 15)
                 .attr('height', 15)
                 .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing : (i) * dimensions.legendSpacing)
-                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 25 : dimensions.barHeight * -1 - 50)
+                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 50 : dimensions.barHeight * -1 - 25)
                 .attr('fill', d => chartTypeInfo[currentMapChart].colors(d))
 
             selection
               .append('text')
                 .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
-                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 10 : dimensions.barHeight * -1 - 35)
+                .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 35 : dimensions.barHeight * -1 - 10)
                 .attr('fill', 'white')
                 .attr('font-size', '22px')
                 .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
@@ -309,13 +310,13 @@ const MapChart = ({
                   .attr('width', 15)
                   .attr('height', 15)
                   .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing : (i) * dimensions.legendSpacing)
-                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 25 : dimensions.barHeight * -1 - 50)
+                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 50 : dimensions.barHeight * -1 - 25)
                   .attr('fill', d => chartTypeInfo[currentMapChart].colors(d))
 
               selection
                 .append('text')
                   .attr('x', (_, i) => i % 2 === 0 ? (i + 1) * dimensions.legendSpacing + 20 : (i) * dimensions.legendSpacing+ 20)
-                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 10 : dimensions.barHeight * -1 - 35)
+                  .attr('y', (_, i) => i % 2 === 0 ? dimensions.barHeight * -1 - 35 : dimensions.barHeight * -1 - 10)
                   .attr('fill', 'white')
                   .attr('font-size', '22px')
                   .text(d => chartTypeInfo[currentMapChart].shortKeys[d])
@@ -412,24 +413,33 @@ const MapChart = ({
   }
   return (
     <>
-      <svg height={height} width={width}>
-        <foreignObject style={{ fontSize: 22 }} id="controls" x={width - 275} y="50" width="700" height="200">
+      <svg opacity={opacity} height={height} width={width}>
+        <foreignObject style={{ fontSize: 22 }} id="controls" x={width - 220} y="30" width="700" height="240">
           <FormControl sx={{ fontSize: '22px  !important' }}>
+            <div>Demgraphic Option:</div>
             <RadioGroup value={value} onChange={handleMapChange}>
               <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.race} control={<Radio sx={whiteStyle} />}
                 label={<Typography style={{ fontSize: 22 }}>Race</Typography>}/>
               <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.income} control={<Radio sx={whiteStyle} />}
                 label={<Typography style={{ fontSize: 22 }}>Income</Typography>}/>
             </RadioGroup>
-          </FormControl>
-          <FormControl sx={{ fontSize: '22px  !important' }}>
+            <div>Map Type:</div>
             <RadioGroup value={type} onChange={handleTypeChange}>
               <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.standard} control={<Radio sx={whiteStyle} />}
                 label={<Typography style={{ fontSize: 22 }}>Standard</Typography>}/>
               <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.proportional} control={<Radio sx={whiteStyle} />}
                 label={<Typography style={{ fontSize: 22 }}>Proportional</Typography>}/>
             </RadioGroup>
+
           </FormControl>
+          {/* <FormControl sx={{ fontSize: '22px  !important' }}>
+            <RadioGroup value={type} onChange={handleTypeChange}>
+              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.standard} control={<Radio sx={whiteStyle} />}
+                label={<Typography style={{ fontSize: 22 }}>Standard</Typography>}/>
+              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.proportional} control={<Radio sx={whiteStyle} />}
+                label={<Typography style={{ fontSize: 22 }}>Proportional</Typography>}/>
+            </RadioGroup>
+          </FormControl> */}
         </foreignObject>
         <g transform={`translate(${margins.left * 0.25},${margins.top})`} ref={circlesRef}>
           <rect
