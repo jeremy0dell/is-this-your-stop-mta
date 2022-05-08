@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import * as d3 from 'd3'
 
-import { enterFn, updateFn, exitFn, transitionColors, stops } from "../logic/data"
+import { enterFn, updateFn, exitFn, transitionColors, stops, chartTypeInfo } from "../logic/data"
 import * as C from '../logic/constants'
 import train from '../assets/images/grid-2.svg'
 import { bind_trailing_args } from "../logic/helpers"
@@ -51,9 +51,9 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
           tooltip
           .html(`
             <div style="height: 100%; width: 100%; background-color: #4d4d4d; border-radius: 10px;">
-              <div style="height: 288px; font-size: 20px; padding: 16px; display: flex; flex-direction: column; justify-content: space-around; text-align: center;">
-<div style="margin-bottom: 12px">Race: <br /><span style="font-weight: bold; color: #FF9C28;">${d.race}</div>
-<div style="margin-bottom: 12px">Income Bracket: <br /><span style="font-weight: bold; color: #FF9C28;">${d.income}</div>
+              <div style="height: ${6 * C.squareSize}px; font-size: 20px; display: flex; flex-direction: column; justify-content: space-around; text-align: center;">
+<div style="margin-bottom: 12px">Race: <br /><span style="font-weight: bold; color: #FF9C28;">${chartTypeInfo.race.shortKeys[d.race]}</div>
+<div style="margin-bottom: 12px">Income Bracket: <br /><span style="font-weight: bold; color: #FF9C28;">${chartTypeInfo.income.shortKeys[d.income]}</div>
 <div style="margin-bottom: 12px">Entered at Stop: <br /><span style="font-weight: bold; color: #FF9C28;">${stops[d.enter][0]}</div>
               </div>
             </div>

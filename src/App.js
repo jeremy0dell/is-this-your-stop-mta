@@ -7,6 +7,7 @@ import useWindowSize from './hooks/useWindowSize';
 
 import TrainChart from './components/TrainChart';
 import MapChart from './components/MapChart';
+import Intro from './components/Intro'
 import Map from './components/Map';
 
 import {
@@ -19,7 +20,8 @@ import {
 import * as C from './logic/constants'
 import { stops } from './logic/data'
 
-import curve from './assets/images/curve.png'
+import firstMap from './assets/images/first-map.png'
+import arrowBtn from './assets/images/arrow-btn2.png'
 
 import './App.css';
 
@@ -195,7 +197,7 @@ function App() {
       <div
         id="map"
         style={{ height: '100vh' }}
-      // className={'flex-column'}
+      className={'flex-column'}
       >
         {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <h1 style={{ fontSize: 100 }}>
@@ -208,47 +210,12 @@ function App() {
         {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <img style={{ height: '100%' }} src={transit} />
         </div> */}
-        {/* <div style={{ fontFamily: "'Helvetica'", backgroundColor: 'darkgrey', display: 'flex', flexDirection: 'column'}}>
-          <div style={{ position: 'absolute', top: 0 }}>hello</div>
-          <div style={{ position: 'absolute', height: '100vh', width: '100vw', top: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img ref={imgRef} id="map-img" style={{ height: '100%', width: '100%' }} src={curve} />
-            <div style={{ padding: 30, textAlign: 'center' }}>
-              <h1 style={{ fontSize: 100 }}>
-                Is This Your Stop?
-              </h1>
-              <h2 style={{ fontSize: 60 }}>
-                How Data Drives The MTA
-              </h2>
-            </div>
-          </div>
-          <Scrollama offset={0} onStepEnter={onStepEnter}>
-            {[1, 2, 3, 4, 5].map((_, stepIndex) => (
-              <Step data={stepIndex} key={stepIndex}>
-                <div
-                  style={{
-                    height: 'calc(100vh - 40px)',
-                    width: '33%',
-                    margin: '20px 0px',
-                    opacity: '90%',
-                    borderRadius: 20,
-                    padding: 8,
-                    textAlign: 'center',
-                    backgroundColor: 'grey',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                    zIndex: 10
-                  }}
-                >
-                  <h1 style={{ fontSize: 100 }}>
-                    Is This Your Stop?
-                  </h1>
-                  <h2 style={{ fontSize: 60 }}>
-                    How Data Drives The MTA
-                  </h2>
-                </div>
-              </Step>
-            ))}
-          </Scrollama>
-        </div> */}
+        {/* <div style={{ fontFamily: "'Helvetica'", backgroundColor: 'darkgrey', display: 'flex', flexDirection: 'column', alignItems: 'end'}}> */}
+          {/* <div style={{ position: 'absolute', height: '100vh', width: '100vw', top: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}> */}
+            {/* <img ref={imgRef} id="map-img" style={{ height: '100%', width: '100%' }} src={firstMap} /> */}
+          {/* </div> */}
+          <Intro />
+        {/* </div> */}
         {windowSize.height && <MapChart
           height={'100%'}
           opacity={1}
