@@ -74,7 +74,8 @@ const MapChart = ({
   setCurrentMapChart,
   currentMapType,
   setCurrentMapType,
-  opacity
+  opacity,
+  showOutro
 }) => {
   const [step, setStep] = useState(0)
   const [value, setValue] = useState(currentMapChart)
@@ -412,12 +413,17 @@ const MapChart = ({
 
   const stepper = (i) => {
     console.log(stepHandlers)
+    // for testing!
+    // if (step === 3) stepHandlers['showOutro']()
+
     if (step === 0) {
       stepHandlers['introduceTrain']()
     } else if (step === 1) {
       stepHandlers['moveFirstStep']()
     } else if (step > 1 && step < 5) {
       stepHandlers['noMoveMiddleSteps']()
+    } else if (step === stops.length + 1) {
+      stepHandlers['showOutro']()
     } else {
       stepHandlers['moveMiddleSteps']()
     }

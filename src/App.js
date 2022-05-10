@@ -8,6 +8,7 @@ import useWindowSize from './hooks/useWindowSize';
 import TrainChart from './components/TrainChart';
 import MapChart from './components/MapChart';
 import Intro from './components/Intro'
+import Outro from './components/Outro'
 import Map from './components/Map';
 
 import {
@@ -46,6 +47,7 @@ function App() {
   const [incomeStack, setIncomeStack] = useState([])
   const [currentStop, setCurrentStop] = useState(0)
   const [action, setAction] = useState('')
+  const [isOutro, setIsOutro] = useState(false)
 
   useEffect(() => {
     const {
@@ -148,6 +150,29 @@ function App() {
     map.style('overflow-y', 'hidden')
   }
 
+  const showOutro = () => {
+    setIsOutro(true)
+    const map = d3.select('#map')
+    const train = d3.select('#train')
+    // const outro = d3.select('#outro')
+
+    setTimeout(() => {
+      map.transition().duration(1500)
+      .style('height', '0vh')
+
+    train.transition().duration(1500)
+      .style('height', '0vh')
+
+      d3.select('#outro').transition().duration(1500)
+      .style('height', '100vh')
+      .on('end', () => {
+        console.log('ended!!')
+        map.remove()
+        train.remove()
+      })
+    }, 200)
+  }
+
   const moveFirstStep = () => {
     setIsMoving(true)
     setAction(C.board)
@@ -183,7 +208,8 @@ function App() {
     introduceTrain,
     moveFirstStep,
     moveMiddleSteps,
-    noMoveMiddleSteps
+    noMoveMiddleSteps,
+    showOutro
   }
 
   // scrolly
@@ -199,23 +225,7 @@ function App() {
         style={{ height: '100vh' }}
       className={'flex-column'}
       >
-        {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <h1 style={{ fontSize: 100 }}>
-            Is This Your Stop?
-          </h1>
-          <h2 style={{ fontSize: 60 }}>
-            How Data Drives The MTA
-          </h2>
-        </div> */}
-        {/* <div style={{ fontFamily: "'Helvetica'", height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <img style={{ height: '100%' }} src={transit} />
-        </div> */}
-        {/* <div style={{ fontFamily: "'Helvetica'", backgroundColor: 'darkgrey', display: 'flex', flexDirection: 'column', alignItems: 'end'}}> */}
-          {/* <div style={{ position: 'absolute', height: '100vh', width: '100vw', top: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}> */}
-            {/* <img ref={imgRef} id="map-img" style={{ height: '100%', width: '100%' }} src={firstMap} /> */}
-          {/* </div> */}
-          <Intro />
-        {/* </div> */}
+        <Intro />
         {windowSize.height && <MapChart
           height={'100%'}
           opacity={1}
@@ -232,6 +242,7 @@ function App() {
           setCurrentMapChart={setCurrentMapChart}
           currentMapType={currentMapType}
           setCurrentMapType={setCurrentMapType}
+          showOutro={showOutro}
         />}
       </div>
       <div id="train" style={{ height: '0vh' }}>
@@ -242,6 +253,15 @@ function App() {
           currentMapChart={currentMapChart}
         />}
       </div>
+      {isOutro ? <div id="outro" style={{ height: '0vh', overflow: 'hidden' }}>
+        <Outro
+            height={'100%'}
+            width={windowSize.width}
+            people={peopleBoarded}      
+            raceStack={raceStack}
+            incomeStack={incomeStack}              
+        />
+      </div> : ''}
     </div>
   );
 }

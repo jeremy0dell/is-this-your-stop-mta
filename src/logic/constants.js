@@ -81,6 +81,19 @@ export const shortIncomeKeys = {
   '$200,000 or more': '>$200,000',
 }
 
+export const incomeSelectors = {
+  'Less than $10,000': 'ten',
+  '$10,000 to $14,999': 'fourteen',
+  '$15,000 to $24,999': 'twentyfour',
+  '$25,000 to $34,999': 'thirtyfour',
+  '$35,000 to $49,999': 'fourtyfour',
+  '$50,000 to $74,999': 'seventyfour',
+  '$75,000 to $99,999': 'ninetynine',
+  '$100,000 to $149,999': 'onefournine',
+  '$150,000 to $199,999': 'oneninenine',
+  '$200,000 or more': 'twohundred',
+}
+
 export const emptyIncomes = {
   'Less than $10,000': 0,
   '$10,000 to $14,999':  0,

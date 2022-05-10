@@ -699,6 +699,7 @@ export const chartTypeInfo = {
     colors: incomeColors,
     keys: C.incomeKeys,
     shortKeys: C.shortIncomeKeys,
+    selectors: C.incomeSelectors,
     axisTitle: type => type === C.standard ? 'Amount of People by Income' : 'Proportion of People by Income'
   }
 }
