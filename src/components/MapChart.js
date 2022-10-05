@@ -57,7 +57,11 @@ const ArrowText = ({ step }) => (
     fontFamily="Helvetica"
     transform="translate(-25 -10)"
   >
-    {step === 0 ? "Begin Simulation" : "Travel to Next Station"}
+    {step === 0
+      ? "Begin Simulation"
+      : step === stops.length + 1
+      ? "End Simulation"
+      : "Travel to Next Station"}
   </text>
 );
 

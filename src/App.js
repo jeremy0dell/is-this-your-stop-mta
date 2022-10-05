@@ -312,6 +312,16 @@ function App() {
               United States Census Bureau
             </a>
           </h3>
+          <h4>
+            Made with ❤️ by{" "}
+            <a
+              href="https://twitter.com/VizByJeremy"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Jeremy Odell
+            </a>
+          </h4>
         </Box>
       </Modal>
 
