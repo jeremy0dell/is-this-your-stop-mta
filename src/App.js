@@ -245,7 +245,7 @@ function App() {
     setCurrentStepIndex(data);
   };
 
-  if (windowSize.height < 920 || windowSize.width < 1536)
+  if (windowSize.height < 920 || windowSize.width < 1436)
     return (
       <div
         style={{
@@ -255,7 +255,7 @@ function App() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          // backgroundColor: "#2b2b2b",
+          backgroundColor: "#2b2b2b",
           color: "white",
           textAlign: "center",
           padding: "0px 20px",

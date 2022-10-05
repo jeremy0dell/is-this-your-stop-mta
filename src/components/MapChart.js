@@ -140,7 +140,7 @@ const MapChart = ({
       d3.select(circlesRef.current)
         .append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(0, -26)")
+        .attr("transform", "translate(-130, -26)")
         .selectAll("g")
         .data(chartTypeInfo[currentMapChart].keys)
         .join((enter) => {
@@ -370,7 +370,7 @@ const MapChart = ({
         d3.select(circlesRef.current)
           .append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(0, -26)")
+          .attr("transform", "translate(-130, -26)")
           .selectAll("g")
           .data(chartTypeInfo[currentMapChart].keys)
           .join((enter) => {
@@ -552,12 +552,14 @@ const MapChart = ({
             <div>Demgraphic Option:</div>
             <RadioGroup value={value} onChange={handleMapChange}>
               <FormControlLabel
+                disabled={isMoving}
                 sx={{ fontSize: "22px  !important" }}
                 value={C.race}
                 control={<Radio sx={whiteStyle} />}
                 label={<Typography style={{ fontSize: 22 }}>Race</Typography>}
               />
               <FormControlLabel
+                disabled={isMoving}
                 sx={{ fontSize: "22px  !important" }}
                 value={C.income}
                 control={<Radio sx={whiteStyle} />}
@@ -567,6 +569,7 @@ const MapChart = ({
             <div>Map Type:</div>
             <RadioGroup value={type} onChange={handleTypeChange}>
               <FormControlLabel
+                disabled={isMoving}
                 sx={{ fontSize: "22px  !important" }}
                 value={C.standard}
                 control={<Radio sx={whiteStyle} />}
@@ -575,6 +578,7 @@ const MapChart = ({
                 }
               />
               <FormControlLabel
+                disabled={isMoving}
                 sx={{ fontSize: "22px  !important" }}
                 value={C.proportional}
                 control={<Radio sx={whiteStyle} />}
