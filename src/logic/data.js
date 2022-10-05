@@ -712,7 +712,6 @@ export const chartSeries = (keys, stack, isProp) => {
       });
       return Object.fromEntries(entries);
     });
-    console.log("hi test", stack);
   }
 
   var series = stacked(stack);

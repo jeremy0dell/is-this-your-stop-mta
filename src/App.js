@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import * as d3 from "d3";
 import { Scrollama, Step } from "react-scrollama";
-
+import InfoIcon from "@mui/icons-material/Info";
 import useWindowSize from "./hooks/useWindowSize";
 
 import TrainChart from "./components/TrainChart";
@@ -10,6 +10,9 @@ import MapChart from "./components/MapChart";
 import Intro from "./components/Intro";
 import Outro from "./components/Outro";
 import Map from "./components/Map";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 import {
   createGridTrain,
@@ -25,6 +28,18 @@ import firstMap from "./assets/images/first-map.png";
 import arrowBtn from "./assets/images/arrow-btn2.png";
 
 import "./App.css";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  backgroundColor: "black",
+  color: "white",
+  border: "2px solid grey",
+  boxShadow: 24,
+  p: 4,
+};
 
 function App() {
   // sizing
@@ -50,6 +65,10 @@ function App() {
   const [currentStop, setCurrentStop] = useState(0);
   const [action, setAction] = useState("");
   const [isOutro, setIsOutro] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const {
@@ -176,7 +195,6 @@ function App() {
         .duration(1500)
         .style("height", "100vh")
         .on("end", () => {
-          console.log("ended!!");
           map.remove();
           train.remove();
         });
@@ -224,7 +242,6 @@ function App() {
 
   // scrolly
   const onStepEnter = ({ data }) => {
-    console.log("entered step", data);
     setCurrentStepIndex(data);
   };
 
@@ -238,7 +255,7 @@ function App() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "black",
+          // backgroundColor: "#2b2b2b",
           color: "white",
           textAlign: "center",
           padding: "0px 20px",
@@ -256,6 +273,48 @@ function App() {
 
   return (
     <div id="app">
+      <InfoIcon
+        style={{
+          position: "absolute",
+          bottom: 24,
+          right: 24,
+          height: 40,
+          width: 40,
+          cursor: "pointer",
+        }}
+        onClick={handleOpen}
+      />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <h2>Thank you for visiting Is This Your Stop!</h2>
+          <h3>
+            Subway crowdedness data comes from data clinic's tool:{" "}
+            <a
+              href="https://subwaycrowds.tsdataclinic.com/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Subway Crowds
+            </a>
+          </h3>
+          <h3>
+            Population demographic data comes from the{" "}
+            <a
+              href="https://data.census.gov/cedsci/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              United States Census Bureau
+            </a>
+          </h3>
+        </Box>
+      </Modal>
+
       <div id="map" style={{ height: "100vh" }} className={"flex-column"}>
         <Intro />
         {windowSize.height && (

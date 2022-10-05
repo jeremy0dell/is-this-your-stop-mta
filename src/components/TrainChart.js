@@ -1,71 +1,99 @@
-import { useEffect, useRef } from "react"
-import * as d3 from 'd3'
+import { useEffect, useRef } from "react";
+import * as d3 from "d3";
 
-import { enterFn, updateFn, exitFn, transitionColors, stops, chartTypeInfo } from "../logic/data"
-import * as C from '../logic/constants'
-import train from '../assets/images/grid-2.svg'
-import { bind_trailing_args } from "../logic/helpers"
+import {
+  enterFn,
+  updateFn,
+  exitFn,
+  transitionColors,
+  stops,
+  chartTypeInfo,
+} from "../logic/data";
+import * as C from "../logic/constants";
+import train from "../assets/images/grid-2.svg";
+import { bind_trailing_args } from "../logic/helpers";
 
 const TrainChart = ({ height, width, people, currentMapChart }) => {
-  const peopleRef = useRef(null)
+  const peopleRef = useRef(null);
 
   useEffect(() => {
     if (peopleRef.current) {
-      const peopleSelection = d3.select(peopleRef.current)
-        .selectAll('circle')
-        .data(people, d => d.id)
+      const peopleSelection = d3
+        .select(peopleRef.current)
+        .selectAll("circle")
+        .data(people, (d) => d.id);
 
       peopleSelection.join(
         bind_trailing_args(enterFn, currentMapChart),
         updateFn,
         exitFn
-      )
+      );
     }
-  }, [people])
+  }, [people]);
 
   useEffect(() => {
     if (peopleRef.current) {
-      const peopleSelection = d3.select(peopleRef.current)
-        .selectAll('circle')
-        .data(people, d => d.id)
+      const peopleSelection = d3
+        .select(peopleRef.current)
+        .selectAll("circle")
+        .data(people, (d) => d.id);
 
-        transitionColors(peopleSelection, currentMapChart)
+      transitionColors(peopleSelection, currentMapChart);
     }
-  }, [currentMapChart])
+  }, [currentMapChart]);
 
   // Tooltip effect/
   useEffect(() => {
     if (peopleRef.current) {
-      const peopleSelection = d3.select(peopleRef.current)
-        .selectAll('circle')
+      const peopleSelection = d3.select(peopleRef.current).selectAll("circle");
 
-      const tooltip = d3.select('foreignObject#tooltip')
+      const tooltip = d3.select("foreignObject#tooltip");
 
-      peopleSelection.on('mouseover', (e, d) => {
+      peopleSelection.on("mouseover", (e, d) => {
+        const element = d3.select(e.path[0]);
 
-        console.log('hiii', d)
-        tooltip
+        element
           .transition()
-          .style('opacity', 1)
+          .duration(300)
+          .style(
+            "filter",
+            "brightness(1.3) drop-shadow(rgba(255, 170, 51, 0.5) 0px 0px 10.63545px)"
+          );
 
-          tooltip
-          .html(`
+        tooltip.transition().style("opacity", 1);
+
+        tooltip.html(`
             <div style="height: 100%; width: 100%; background-color: #4d4d4d; border-radius: 10px;">
-              <div style="height: ${6 * C.squareSize}px; font-size: 20px; display: flex; flex-direction: column; justify-content: space-around; text-align: center;">
-<div style="margin-bottom: 12px">Race: <br /><span style="font-weight: bold; color: #FF9C28;">${chartTypeInfo.race.shortKeys[d.race]}</div>
-<div style="margin-bottom: 12px">Income Bracket: <br /><span style="font-weight: bold; color: #FF9C28;">${chartTypeInfo.income.shortKeys[d.income]}</div>
-<div style="margin-bottom: 12px">Entered at Stop: <br /><span style="font-weight: bold; color: #FF9C28;">${stops[d.enter][0]}</div>
+              <div style="height: ${
+                6 * C.squareSize
+              }px; font-size: 20px; display: flex; flex-direction: column; justify-content: space-around; text-align: center;">
+<div style="margin-bottom: 12px">Race: <br /><span style="font-weight: bold; color: #FF9C28;">${
+          chartTypeInfo.race.shortKeys[d.race]
+        }</div>
+<div style="margin-bottom: 12px">Income Bracket: <br /><span style="font-weight: bold; color: #FF9C28;">${
+          chartTypeInfo.income.shortKeys[d.income]
+        }</div>
+<div style="margin-bottom: 12px">Entered at Stop: <br /><span style="font-weight: bold; color: #FF9C28;">${
+          stops[d.enter][0]
+        }</div>
               </div>
             </div>
-          `)
-          
-      })
+          `);
+      });
 
-      peopleSelection.on('mouseleave', (e, d) => {
+      peopleSelection.on("mouseleave", (e, d) => {
         // // console.log('hiii', e.pageX, e.pageY, d, d3.select('svg#train-rect'))
-        tooltip
+        const element = d3.select(e.path[0]);
+
+        element
           .transition()
-          .style('opacity', 0)
+          .duration(300)
+          .style(
+            "filter",
+            "brightness(1) drop-shadow(rgba(255, 170, 51, 0.5) 0px 0px 0px)"
+          );
+
+        tooltip.transition().style("opacity", 0);
         // tooltip
         //   .html(`<div style="padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         //     <div>Race: ${d.race}</div>
@@ -78,16 +106,14 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
         // tooltip
         //   .transition()
         //   .html(`<div style="position: absolute; padding: 10px; background-color: #4d4d4d; border-radius: 5px; left: 0px; top: 0px; "></div>`)
-      })
-
-      console.log('my circles are', peopleSelection, 'my tooltip is', tooltip)
+      });
     }
-  }, [people, currentMapChart])
+  }, [people, currentMapChart]);
 
   const margin = {
     top: 100,
-    left:( width / 2) - ((C.width * C.squareSize) / 2) - (C.squareSize * 1.5)
-  }
+    left: width / 2 - (C.width * C.squareSize) / 2 - C.squareSize * 1.5,
+  };
 
   return (
     <svg id="train-rect" height={height} width={width}>
@@ -96,7 +122,7 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
         // height={200}
         width={C.width * C.squareSize}
         height={C.height * C.squareSize}
-        transform={`translate(${margin.left} ${margin.top})`}    
+        transform={`translate(${margin.left} ${margin.top})`}
       ></image>
       <g
         id="circs"
@@ -108,12 +134,21 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
         width={4 * C.squareSize}
         height={6 * C.squareSize}
         opacity={0}
-        transform={`translate(${(C.width * C.squareSize) + (margin.left * 1.25)} ${margin.top})`}
+        transform={`translate(${C.width * C.squareSize + margin.left * 1.25} ${
+          margin.top
+        })`}
       >
-        <div style={{ height: '100%', width: '100%', backgroundColor: '#4d4d4d', borderRadius: 10 }}></div>
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            backgroundColor: "#4d4d4d",
+            borderRadius: 10,
+          }}
+        ></div>
       </foreignObject>
     </svg>
-  )
-}
+  );
+};
 
-export default TrainChart
+export default TrainChart;

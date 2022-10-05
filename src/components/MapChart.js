@@ -451,8 +451,6 @@ const MapChart = ({
           .attr("opacity", 1)
           .call(currentMapType === C.standard ? axis : axisProp)
           .call((g) => g.select(".domain").remove());
-
-        console.log("do we have a", a);
       }
     }
   }, [currentMapChart, currentMapType]);
@@ -478,7 +476,6 @@ const MapChart = ({
   };
 
   const stepper = (i) => {
-    console.log(stepHandlers);
     // for testing!
     // if (step === 3) stepHandlers['showOutro']()
 
