@@ -264,7 +264,7 @@ function App() {
         <h1>Thank you for visiting Is This Your Stop?</h1>
 
         <h2>
-          Please visit this interactive wed-based data visualization on a BIG
+          Please visit this interactive web-based data visualization on a BIG
           screen
         </h2>
         <h3>-Jeremy Odell ❤️</h3>
