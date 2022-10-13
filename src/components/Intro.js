@@ -126,10 +126,10 @@ const Second = ({ click }) => {
       >
         <h2 style={{ fontSize: 25 }}>
           New York City is by many measures the most culturally and
-          socioeconomically diverse cities in America. Coupled with NYC’s
-          massive population and intercity transit system, these factors put
-          together have created the conditions for a diverse and interesting
-          population of subway riders in NYC.
+          socioeconomically diverse city in America. Coupled with NYC’s massive
+          population and intercity transit system, these factors put together
+          have created the conditions for a diverse and interesting population
+          of subway riders in NYC.
         </h2>
         <div style={{ borderTop: "2px solid black" }}></div>
         <h2 style={{ fontSize: 25 }}>
