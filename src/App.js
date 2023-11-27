@@ -267,6 +267,8 @@ function App() {
           Please visit this interactive web-based data visualization on a BIG
           screen
         </h2>
+        <p>(At least 1436 x 920)</p>
+        <p>(You may need to make your window full screen, and hide your toolbar temporarily)</p>
         <h3>-Jeremy Odell ❤️</h3>
       </div>
     );
