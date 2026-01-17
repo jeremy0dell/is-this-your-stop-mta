@@ -221,7 +221,7 @@ export const handleBoard = (
       enter: currentStop,
       exit: null,
     };
-    // console.log('this person has race:', sampleFromProportions(stops[currentStop][3]))
+
     // if stuff
     if (availableSeats.length) {
       var randIdx = Math.floor(availableSeats.length * Math.random());

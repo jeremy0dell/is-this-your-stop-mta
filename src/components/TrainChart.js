@@ -50,7 +50,6 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
       const tooltip = d3.select("foreignObject#tooltip");
 
       peopleSelection.on("mouseover", (e, d) => {
-        console.log(e.target)
         const element = d3.select(e.target);
 
         element
@@ -83,7 +82,6 @@ const TrainChart = ({ height, width, people, currentMapChart }) => {
       });
 
       peopleSelection.on("mouseleave", (e, d) => {
-        // // console.log('hiii', e.pageX, e.pageY, d, d3.select('svg#train-rect'))
         const element = d3.select(e.target);
 
         element

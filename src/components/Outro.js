@@ -596,8 +596,6 @@ var radius = Math.min(width, height) / 2 - margin;
 const arcs = (slice) => {
   var pieData = Object.entries(omit(slice, "stop"));
 
-  // console.log(pieData)
-
   var data = d3.pie().value((d) => d[1]);
 
   return data(pieData);
@@ -617,7 +615,6 @@ const Outro = ({ height, width, raceStack, incomeStack }) => {
       svgHeight = 250;
 
     var radius = Math.min(svgWidth, svgHeight) / 2;
-    // console.log('hi', radius)
 
     var idxs = [3, 11, 21];
 
@@ -653,7 +650,6 @@ const Outro = ({ height, width, raceStack, incomeStack }) => {
         )
         .on("mouseover", (e, d) => {
           var tooltip = d3.select("#tooltip");
-          // console.log('hi', e, tooltip, e.clientX)
 
           tooltip
             .style("top", e.clientY - 30 + "px")
@@ -683,9 +679,7 @@ Proportion of ${chartTypeInfo["race"].shortKeys[d.data[0]]} riders at this stop:
           var tooltip = d3.select("#tooltip");
 
           tooltip.transition().style("opacity", 0);
-          // .on('end', (a,b,c,d) => console.log('end', a,b,c,d))
 
-          // console.log(d)
           d3.selectAll(
             `path.${d.data[0].replaceAll(" ", "").replaceAll(":", "")}`
           )
@@ -756,9 +750,7 @@ Proportion of ${
           var tooltip = d3.select("#tooltip");
 
           tooltip.transition().style("opacity", 0);
-          // .on('end', (a,b,c,d) => console.log('end', a,b,c,d))
 
-          // console.log(d)
           d3.selectAll(`path.${chartTypeInfo["income"].selectors[d.data[0]]}`)
             // .transition()
             .style(

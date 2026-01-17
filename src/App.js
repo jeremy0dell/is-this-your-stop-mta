@@ -83,8 +83,8 @@ function App() {
     let totalCopy = cloneDeep(peopleTotal);
 
     switch (action) {
-      case C.egress:
-        var { boarded, total, train } = handleEgress(
+      case C.egress: {
+        const { boarded, total, train } = handleEgress(
           newGridTrain,
           boardedCopy,
           totalCopy,
@@ -95,8 +95,9 @@ function App() {
 
         updateState(boarded, total, train);
         break;
-      case C.moveSeats:
-        var { boarded, total, train } = handleMoveSeats(
+      }
+      case C.moveSeats: {
+        const { boarded, total, train } = handleMoveSeats(
           newGridTrain,
           totalCopy,
           boardedCopy,
@@ -106,8 +107,9 @@ function App() {
 
         updateState(boarded, total, train);
         break;
-      case C.board:
-        var { boarded, total, train } = handleBoard(
+      }
+      case C.board: {
+        const { boarded, total, train } = handleBoard(
           newGridTrain,
           totalCopy,
           boardedCopy,
@@ -157,6 +159,7 @@ function App() {
         );
 
         break;
+      }
       default:
         return;
     }
