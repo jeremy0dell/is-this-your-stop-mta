@@ -175,9 +175,9 @@ function App() {
     const map = d3.select("#map");
     const train = d3.select("#train");
 
-    map.transition().duration(1500).style("height", "55vh");
+    map.transition().duration(C.TRANSITION_DURATION).style("height", "55vh");
 
-    train.transition().duration(1500).style("height", "45vh");
+    train.transition().duration(C.TRANSITION_DURATION).style("height", "45vh");
 
     map.style("overflow-y", "hidden");
   };
@@ -189,19 +189,19 @@ function App() {
     // const outro = d3.select('#outro')
 
     setTimeout(() => {
-      map.transition().duration(1500).style("height", "0vh");
+      map.transition().duration(C.TRANSITION_DURATION).style("height", "0vh");
 
-      train.transition().duration(1500).style("height", "0vh");
+      train.transition().duration(C.TRANSITION_DURATION).style("height", "0vh");
 
       d3.select("#outro")
         .transition()
-        .duration(1500)
+        .duration(C.TRANSITION_DURATION)
         .style("height", "100vh")
         .on("end", () => {
           map.remove();
           train.remove();
         });
-    }, 200);
+    }, C.OUTRO_DELAY);
   };
 
   const moveFirstStep = () => {
@@ -211,28 +211,28 @@ function App() {
     setTimeout(() => {
       setCurrentStop(currentStop + 1);
       setIsMoving(false);
-    }, 2000);
+    }, C.FIRST_STOP_DURATION);
   };
 
   const noMoveMiddleSteps = () => {
     setIsMoving(true);
     setAction(C.egress);
-    setTimeout(() => setAction(C.board), 2850);
+    setTimeout(() => setAction(C.board), C.EGRESS_TO_BOARD_DELAY);
     setTimeout(() => {
       setCurrentStop(currentStop + 1);
       setIsMoving(false);
-    }, 5100);
+    }, C.NO_MOVE_TOTAL_DURATION);
   };
 
   const moveMiddleSteps = () => {
     setIsMoving(true);
     setAction(C.egress);
-    setTimeout(() => setAction(C.moveSeats), 2850);
-    setTimeout(() => setAction(C.board), 4100);
+    setTimeout(() => setAction(C.moveSeats), C.EGRESS_TO_MOVE_DELAY);
+    setTimeout(() => setAction(C.board), C.MOVE_TO_BOARD_DELAY);
     setTimeout(() => {
       setCurrentStop(currentStop + 1);
       setIsMoving(false);
-    }, 6500);
+    }, C.WITH_MOVE_TOTAL_DURATION);
   };
 
   const stepHandlers = {
@@ -248,7 +248,7 @@ function App() {
     setCurrentStepIndex(data);
   };
 
-  if (windowSize.height < 920 || windowSize.width < 1436)
+  if (windowSize.height < C.MIN_SCREEN_HEIGHT || windowSize.width < C.MIN_SCREEN_WIDTH)
     return (
       <div
         style={{
@@ -270,7 +270,7 @@ function App() {
           Please visit this interactive web-based data visualization on a BIG
           screen
         </h2>
-        <p>(At least 1436 x 920)</p>
+        <p>(At least {C.MIN_SCREEN_WIDTH} x {C.MIN_SCREEN_HEIGHT})</p>
         <p>(You may need to make your window full screen, and hide your toolbar temporarily)</p>
         <h3>-Jeremy Odell ❤️</h3>
       </div>

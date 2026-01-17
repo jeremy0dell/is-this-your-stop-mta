@@ -14,6 +14,23 @@ export const egress = 'egress'
 export const moveSeats = 'moveSeats'
 export const board = 'board'
 
+// animation timings (in milliseconds)
+export const TRANSITION_DURATION = 1500 // Duration for view transitions (intro/outro)
+export const OUTRO_DELAY = 200 // Delay before showing outro animation
+
+// train stop timings (in milliseconds)
+// These values are tuned to match the pacing of the visualization
+export const FIRST_STOP_DURATION = 2000 // First stop only has boarding
+export const EGRESS_TO_BOARD_DELAY = 2850 // Time from egress to board action
+export const EGRESS_TO_MOVE_DELAY = 2850 // Time from egress to move seats action
+export const MOVE_TO_BOARD_DELAY = 4100 // Time from egress to board (after move)
+export const NO_MOVE_TOTAL_DURATION = 5100 // Total time for stop without seat movement
+export const WITH_MOVE_TOTAL_DURATION = 6500 // Total time for stop with seat movement
+
+// screen requirements
+export const MIN_SCREEN_WIDTH = 1436
+export const MIN_SCREEN_HEIGHT = 920
+
 // map chart types
 export const race = 'race'
 export const income = 'income'
