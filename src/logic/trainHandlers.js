@@ -224,13 +224,13 @@ export const handleBoard = (
 
     // if stuff
     if (availableSeats.length) {
-      var randIdx = Math.floor(availableSeats.length * Math.random());
+      const randIdx = Math.floor(availableSeats.length * Math.random());
       availableSeats[randIdx].occupant = newPerson;
       newPerson.x = availableSeats[randIdx].x;
       newPerson.y = availableSeats[randIdx].y;
       availableSeats.splice(randIdx, 1);
     } else {
-      var randIdx = Math.floor(availableSpaces.length * Math.random());
+      const randIdx = Math.floor(availableSpaces.length * Math.random());
       availableSpaces[randIdx].occupant = newPerson;
       newPerson.x = availableSpaces[randIdx].x;
       newPerson.y = availableSpaces[randIdx].y;

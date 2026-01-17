@@ -61,7 +61,7 @@ const First = ({ click }) => {
           justifyContent: "center",
         }}
       >
-        <img style={{ height: "50%" }} src={arrowCircle} />
+        <img style={{ height: "50%" }} src={arrowCircle} alt="Scroll down arrow" />
         <div style={{ fontWeight: "bold", marginLeft: 12, fontSize: 45 }}>
           Next Stop
         </div>
@@ -152,7 +152,7 @@ const Second = ({ click }) => {
           cursor: "pointer",
         }}
       >
-        <img style={{ height: "50%" }} src={arrowCircle} />
+        <img style={{ height: "50%" }} src={arrowCircle} alt="Scroll down arrow" />
         <div style={{ fontWeight: "bold", marginLeft: 12, fontSize: 45 }}>
           Next Stop
         </div>
@@ -240,7 +240,7 @@ const Third = ({ click }) => {
           cursor: "pointer",
         }}
       >
-        <img style={{ height: "50%" }} src={arrowCircle} />
+        <img style={{ height: "50%" }} src={arrowCircle} alt="Scroll down arrow" />
         <div style={{ fontWeight: "bold", marginLeft: 12, fontSize: 45 }}>
           Next Stop
         </div>
@@ -328,7 +328,7 @@ const Intro = () => {
           opacity: 1,
         }}
       >
-        <img style={{ height: "100%", width: "100%" }} src={firstMap} />
+        <img style={{ height: "100%", width: "100%" }} src={firstMap} alt="L train route map - eastern section" />
       </div>
       <div
         id="map-img1"
@@ -343,7 +343,7 @@ const Intro = () => {
           opacity: 0,
         }}
       >
-        <img style={{ height: "100%", width: "100%" }} src={secondMap} />
+        <img style={{ height: "100%", width: "100%" }} src={secondMap} alt="L train route map - central section" />
       </div>
       <div
         id="map-img2"
@@ -358,7 +358,7 @@ const Intro = () => {
           opacity: 0,
         }}
       >
-        <img style={{ height: "100%", width: "100%" }} src={thirdMap} />
+        <img style={{ height: "100%", width: "100%" }} src={thirdMap} alt="L train route map - western section" />
       </div>
       <First click={handleChange} />
       <Second click={handleChange} />

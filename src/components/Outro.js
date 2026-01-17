@@ -611,16 +611,16 @@ const arcs = (slice) => {
 
 const Outro = ({ height, width, raceStack, incomeStack }) => {
   useEffect(() => {
-    var svgWidth = 250,
-      svgHeight = 250;
+    const svgWidth = 250;
+    const svgHeight = 250;
 
-    var radius = Math.min(svgWidth, svgHeight) / 2;
+    const radius = Math.min(svgWidth, svgHeight) / 2;
 
-    var idxs = [3, 11, 21];
+    const idxs = [3, 11, 21];
 
-    for (var i = 0; i < idxs.length; i++) {
-      var raceSelection = d3.select("#visualizations");
-      var raceArcs = arcs(raceStack[idxs[i]]);
+    for (let i = 0; i < idxs.length; i++) {
+      const raceSelection = d3.select("#visualizations");
+      const raceArcs = arcs(raceStack[idxs[i]]);
       // var raceArcs = arcs(dummyRaces[idxs[i]])
       let total = raceArcs.reduce((acc, next) => acc + next.value, 0);
 
@@ -691,9 +691,9 @@ Proportion of ${chartTypeInfo["race"].shortKeys[d.data[0]]} riders at this stop:
         });
     }
 
-    for (var i = 0; i < idxs.length; i++) {
-      var incomeSelection = d3.select("#visualizations");
-      var incomeArcs = arcs(incomeStack[idxs[i]]);
+    for (let i = 0; i < idxs.length; i++) {
+      const incomeSelection = d3.select("#visualizations");
+      const incomeArcs = arcs(incomeStack[idxs[i]]);
       // var incomeArcs = arcs(dummyIncomes[idxs[i]])
 
       let total = incomeArcs.reduce((acc, next) => acc + next.value, 0);
@@ -760,8 +760,8 @@ Proportion of ${
         });
     }
 
-    for (var i = 0; i < idxs.length; i++) {
-      var incomeSelection = d3.select("#visualizations");
+    for (let i = 0; i < idxs.length; i++) {
+      const incomeSelection = d3.select("#visualizations");
 
       incomeSelection
         .append("text")
