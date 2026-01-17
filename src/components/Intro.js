@@ -275,30 +275,26 @@ const Intro = () => {
   const [current, setCurrent] = useState(0);
 
   const handleChange = () => {
-    const curr = d3
-      .select(`#stop${current}`)
+    d3.select(`#stop${current}`)
       .transition()
       .duration(1000)
       .delay(200)
       .style("opacity", 0)
       .remove();
 
-    const currImg = d3
-      .select(`#map-img${current}`)
+    d3.select(`#map-img${current}`)
       .transition()
       .duration(1000)
       .delay(500)
       .style("opacity", 0)
       .remove();
 
-    const next = d3
-      .select(`#stop${current + 1}`)
+    d3.select(`#stop${current + 1}`)
       .transition()
       .duration(1000)
       .style("opacity", 1);
 
-    const nextImg = d3
-      .select(`#map-img${current + 1}`)
+    d3.select(`#map-img${current + 1}`)
       .transition()
       .duration(1000)
       .style("opacity", 1);

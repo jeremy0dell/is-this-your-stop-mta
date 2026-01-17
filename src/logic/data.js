@@ -586,8 +586,6 @@ const income = [
   },
 ];
 
-//
-const rent = [2275, 2275, 2200, 2200, 2200, 2200, 3053, 3053, 3053, 3053];
 // stops
 // [0] is name, [1] is fullness, [2] is egress, [3] is racial data, [4] is income data
 export const stops = [

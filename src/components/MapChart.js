@@ -192,13 +192,6 @@ const MapChart = ({
   }, []);
 
   useEffect(() => {
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, C.maxOccupancy])
-      .range([dimensions.barHeight, 0]);
-
-    const axis = d3.axisLeft(yScale);
-
     if (action === C.board) {
       /*******ON FIRST BOARD*******/
       if (step === 2) {
