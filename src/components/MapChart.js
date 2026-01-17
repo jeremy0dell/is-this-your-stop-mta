@@ -1,40 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import Typography from "@mui/material/Typography";
-
 import * as d3 from "d3";
 import * as C from "../logic/constants";
 
 import { stops, chartSeries, chartTypeInfo } from "../logic/data";
-
-const stripMapColor = (curr, i) => {
-  if (curr === i) {
-    return "#ffa812";
-  } else if (curr > i) {
-    return "#a75c00";
-  } else {
-    return "#231f20";
-  }
-};
-
-const whiteStyle = {
-  color: "white",
-  fontSize: "22px !important",
-  "&.Mui-checked": {
-    color: "#FF9C28",
-    fontSize: "22px !important",
-  },
-  "&.MuiFormControlLabel-label": {
-    fontSize: "22px !important",
-  },
-  "& span": {
-    fontSize: "22px !important",
-  },
-};
+import StripMap from "./StripMap";
+import ChartControls from "./ChartControls";
 
 const ArrowPath = ({ transform, isGlowing }) => (
   <path
@@ -207,6 +178,11 @@ const MapChart = ({
         stacks[currentMapChart],
         currentMapType === C.proportional
       );
+
+      const yScale = d3
+        .scaleLinear()
+        .domain([0, C.maxOccupancy])
+        .range([dimensions.barHeight, 0]);
 
       if (circlesRef.current) {
         // eslint-disable-next-line
@@ -497,32 +473,6 @@ const MapChart = ({
       .delay(2000)
       .attr("opacity", 1);
 
-  const stopCircs = stops.map((stop, i) => (
-    <React.Fragment key={stop[0]}>
-      <circle
-        r={10}
-        cx={
-          (dimensions.width / stops.length) * (i + 1) -
-          30 +
-          dimensions.paddingSides * 2
-        }
-        cy={dimensions.height / 2}
-        fill={stripMapColor(currentStop, i)}
-      />
-      <text
-        fill="white"
-        fontSize="22px"
-        fontFamily="Helvetica"
-        transform={`translate(${
-          (dimensions.width / stops.length) * (i + 1) -
-          30 +
-          dimensions.paddingSides * 1.5
-        },${dimensions.height + 15}) rotate(35)`}
-      >
-        {stop[0]}
-      </text>
-    </React.Fragment>
-  ));
 
   const handleMapChange = (event) => {
     setValue(event.target.value);
@@ -544,54 +494,13 @@ const MapChart = ({
           width="700"
           height="240"
         >
-          <FormControl sx={{ fontSize: "22px  !important" }}>
-            <div>Demgraphic Option:</div>
-            <RadioGroup value={value} onChange={handleMapChange}>
-              <FormControlLabel
-                disabled={isMoving}
-                sx={{ fontSize: "22px  !important" }}
-                value={C.race}
-                control={<Radio sx={whiteStyle} />}
-                label={<Typography style={{ fontSize: 22 }}>Race</Typography>}
-              />
-              <FormControlLabel
-                disabled={isMoving}
-                sx={{ fontSize: "22px  !important" }}
-                value={C.income}
-                control={<Radio sx={whiteStyle} />}
-                label={<Typography style={{ fontSize: 22 }}>Income</Typography>}
-              />
-            </RadioGroup>
-            <div>Map Type:</div>
-            <RadioGroup value={type} onChange={handleTypeChange}>
-              <FormControlLabel
-                disabled={isMoving}
-                sx={{ fontSize: "22px  !important" }}
-                value={C.standard}
-                control={<Radio sx={whiteStyle} />}
-                label={
-                  <Typography style={{ fontSize: 22 }}>Standard</Typography>
-                }
-              />
-              <FormControlLabel
-                disabled={isMoving}
-                sx={{ fontSize: "22px  !important" }}
-                value={C.proportional}
-                control={<Radio sx={whiteStyle} />}
-                label={
-                  <Typography style={{ fontSize: 22 }}>Proportional</Typography>
-                }
-              />
-            </RadioGroup>
-          </FormControl>
-          {/* <FormControl sx={{ fontSize: '22px  !important' }}>
-            <RadioGroup value={type} onChange={handleTypeChange}>
-              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.standard} control={<Radio sx={whiteStyle} />}
-                label={<Typography style={{ fontSize: 22 }}>Standard</Typography>}/>
-              <FormControlLabel sx={{ fontSize: '22px  !important' }} value={C.proportional} control={<Radio sx={whiteStyle} />}
-                label={<Typography style={{ fontSize: 22 }}>Proportional</Typography>}/>
-            </RadioGroup>
-          </FormControl> */}
+          <ChartControls
+            value={value}
+            type={type}
+            isMoving={isMoving}
+            onMapChange={handleMapChange}
+            onTypeChange={handleTypeChange}
+          />
         </foreignObject>
         <g
           transform={`translate(${margins.left * 0.28},${margins.top})`}
@@ -604,7 +513,7 @@ const MapChart = ({
             ry={20}
             fill="#a8a9ac"
           />
-          {stopCircs}
+          <StripMap currentStop={currentStop} dimensions={dimensions} />
         </g>
         <g
           transform={`translate(${width / 1.125} ${margins.top / 1.1})`}
