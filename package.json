@@ -32,11 +32,7 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ],
-    "rules": {
-      "no-redeclare": "off",
-      "react-hooks/exhaustive-deps": "off"
-    }
+    ]
   },
   "browserslist": {
     "production": [

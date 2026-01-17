@@ -91,20 +91,20 @@ const MapChart = ({
 
   // add axis
   useEffect(() => {
-    var y = d3
+    const yScale = d3
       .scaleLinear()
       .domain([0, C.maxOccupancy])
       .range([dimensions.barHeight, 0]);
 
-    var yProp = d3
+    const yPropScale = d3
       .scaleLinear()
       .domain([0, 100])
       .range([dimensions.barHeight, 0]);
 
-    var formatPercent = d3.format(".0%");
+    const formatPercent = d3.format(".0%");
 
-    var axis = d3.axisLeft(y);
-    var axisProp = d3.axisLeft(yProp).tickFormat(formatPercent);
+    const axis = d3.axisLeft(yScale);
+    const axisProp = d3.axisLeft(yPropScale).tickFormat(formatPercent);
 
     if (circlesRef.current) {
       // add axis
@@ -192,7 +192,12 @@ const MapChart = ({
   }, []);
 
   useEffect(() => {
-    var axis = d3.axisLeft(y);
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, C.maxOccupancy])
+      .range([dimensions.barHeight, 0]);
+
+    const axis = d3.axisLeft(yScale);
 
     if (action === C.board) {
       /*******ON FIRST BOARD*******/
@@ -204,16 +209,11 @@ const MapChart = ({
         showElement("foreignObject#controls");
       }
       /*******END ON FIRST BOARD*******/
-      var series = chartSeries(
+      const series = chartSeries(
         chartTypeInfo[currentMapChart].keys,
         stacks[currentMapChart],
         currentMapType === C.proportional
       );
-
-      var y = d3
-        .scaleLinear()
-        .domain([0, C.maxOccupancy])
-        .range([dimensions.barHeight, 0]);
 
       if (circlesRef.current) {
         // eslint-disable-next-line
@@ -264,16 +264,16 @@ const MapChart = ({
                 .duration(1000)
                 .delay(2200)
                 .attr("height", (d) => {
-                  return y(d[0]) - y(d[1]);
+                  return yScale(d[0]) - yScale(d[1]);
                 })
-                .attr("y", (d, i) => y(d[1]) - dimensions.barHeight),
+                .attr("y", (d, i) => yScale(d[1]) - dimensions.barHeight),
             (update) =>
               update
                 .transition()
                 .duration(1000)
                 // .delay(2000)
-                .attr("height", (d) => y(d[0]) - y(d[1]))
-                .attr("y", (d, i) => y(d[1]) - dimensions.barHeight),
+                .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
+                .attr("y", (d, i) => yScale(d[1]) - dimensions.barHeight),
             (exit) =>
               exit
                 .transition()
@@ -288,13 +288,13 @@ const MapChart = ({
   }, [people]);
 
   useEffect(() => {
-    var series = chartSeries(
+    const series = chartSeries(
       chartTypeInfo[currentMapChart].keys,
       stacks[currentMapChart],
       currentMapType === C.proportional
     );
 
-    var y = d3
+    const yScale = d3
       .scaleLinear()
       .domain([0, C.maxOccupancy])
       .range([dimensions.barHeight, 0]);
@@ -348,16 +348,16 @@ const MapChart = ({
               .transition()
               .duration(1000)
               // .delay(2000)
-              .attr("height", (d) => y(d[0]) - y(d[1]))
-              .attr("y", (d, i) => y(d[1]) - dimensions.barHeight),
+              .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
+              .attr("y", (d, i) => yScale(d[1]) - dimensions.barHeight),
 
           (update) =>
             update
               .transition()
               .duration(1000)
               // .delay(2000)
-              .attr("height", (d) => y(d[0]) - y(d[1]))
-              .attr("y", (d, i) => y(d[1]) - dimensions.barHeight),
+              .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
+              .attr("y", (d, i) => yScale(d[1]) - dimensions.barHeight),
           (exit) =>
             exit
               .transition()
@@ -417,8 +417,7 @@ const MapChart = ({
 
         d3.selectAll("text.label").remove();
 
-        var a = d3
-          .select(circlesRef.current)
+        d3.select(circlesRef.current)
           .append("text")
           .attr("class", "label")
           .attr(
@@ -429,24 +428,24 @@ const MapChart = ({
           .text(chartTypeInfo[currentMapChart].axisTitle(currentMapType))
           .style("font-size", 20);
 
-        var y = d3
+        const yScale = d3
           .scaleLinear()
           .domain([0, C.maxOccupancy])
           .range([dimensions.barHeight, 0]);
 
-        var yProp = d3
+        const yPropScale = d3
           .scaleLinear()
           .domain([0, 1])
           .range([dimensions.barHeight, 0]);
 
-        var formatPercent = d3.format(".0%");
+        const formatPercent = d3.format(".0%");
 
-        var axis = d3.axisLeft(y);
-        var axisProp = d3.axisLeft(yProp).tickFormat(formatPercent);
+        const axis = d3.axisLeft(yScale);
+        const axisProp = d3.axisLeft(yPropScale).tickFormat(formatPercent);
 
         d3.selectAll("g.axis").remove();
 
-        var b = d3
+        d3
           .select(circlesRef.current)
           .append("g")
           .attr("class", "axis")

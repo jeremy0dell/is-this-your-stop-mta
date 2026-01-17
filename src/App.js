@@ -1,21 +1,19 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import * as d3 from "d3";
-import { Scrollama, Step } from "react-scrollama";
 import InfoIcon from "@mui/icons-material/Info";
 import useWindowSize from "./hooks/useWindowSize";
+import { useTrainSimulation } from "./hooks/useTrainSimulation";
+import { useVisualizationData } from "./hooks/useVisualizationData";
 
 import TrainChart from "./components/TrainChart";
 import MapChart from "./components/MapChart";
 import Intro from "./components/Intro";
 import Outro from "./components/Outro";
-import Map from "./components/Map";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 import {
-  createGridTrain,
   scanTrain,
   handleEgress,
   handleMoveSeats,
@@ -23,9 +21,6 @@ import {
 } from "./logic/trainHandlers";
 import * as C from "./logic/constants";
 import { stops } from "./logic/data";
-
-import firstMap from "./assets/images/first-map.png";
-import arrowBtn from "./assets/images/arrow-btn2.png";
 
 import "./App.css";
 const style = {
@@ -42,31 +37,33 @@ const style = {
 };
 
 function App() {
-  // sizing
+  // Window sizing
   const windowSize = useWindowSize();
-  // train state
-  const [gridTrain, setGridTrain] = useState(
-    createGridTrain(C.height, C.width, C.seatIdxs, C.doorIdxs)
-  );
-  const [peopleBoarded, setPeopleBoarded] = useState([]);
-  const [peopleTotal, setPeopleTotal] = useState([]);
-  // map state
+
+  // Train simulation state (grouped with useReducer)
+  const {
+    gridTrain,
+    peopleBoarded,
+    peopleTotal,
+    currentStop,
+    action,
+    isMoving,
+    updateTrain,
+    setCurrentStop,
+    setAction,
+    setIsMoving,
+  } = useTrainSimulation();
+
+  // Visualization data state (grouped with useReducer)
+  const { genderStack, raceStack, incomeStack, addDataPoint } =
+    useVisualizationData();
+
+  // UI state (simple toggles remain as useState)
   const [currentMapChart, setCurrentMapChart] = useState(C.race);
   const [currentMapType, setCurrentMapType] = useState(C.standard);
-  // orchestration
-  const [isMoving, setIsMoving] = useState(false);
-  // scrolly
-  const [currentStepIndex, setCurrentStepIndex] = useState(null);
-  const imgRef = useRef(null);
-  // specific charts
-  const [genderStack, setGenderStack] = useState([]);
-  const [raceStack, setRaceStack] = useState([]);
-  const [incomeStack, setIncomeStack] = useState([]);
-  const [currentStop, setCurrentStop] = useState(0);
-  const [action, setAction] = useState("");
   const [isOutro, setIsOutro] = useState(false);
-
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -83,8 +80,8 @@ function App() {
     let totalCopy = cloneDeep(peopleTotal);
 
     switch (action) {
-      case C.egress:
-        var { boarded, total, train } = handleEgress(
+      case C.egress: {
+        const { boarded, total, train } = handleEgress(
           newGridTrain,
           boardedCopy,
           totalCopy,
@@ -93,10 +90,11 @@ function App() {
           currentStop
         );
 
-        updateState(boarded, total, train);
+        updateTrain(train, boarded, total);
         break;
-      case C.moveSeats:
-        var { boarded, total, train } = handleMoveSeats(
+      }
+      case C.moveSeats: {
+        const { boarded, total, train } = handleMoveSeats(
           newGridTrain,
           totalCopy,
           boardedCopy,
@@ -104,10 +102,11 @@ function App() {
           occupiedSpaces
         );
 
-        updateState(boarded, total, train);
+        updateTrain(train, boarded, total);
         break;
-      case C.board:
-        var { boarded, total, train } = handleBoard(
+      }
+      case C.board: {
+        const { boarded, total, train } = handleBoard(
           newGridTrain,
           totalCopy,
           boardedCopy,
@@ -117,64 +116,50 @@ function App() {
           currentStop
         );
 
-        updateState(boarded, total, train);
+        updateTrain(train, boarded, total);
 
-        // gender
-        setGenderStack(
-          genderStack.concat({
-            stop: currentStop,
-            male: boardedCopy.reduce(
-              (a, n) => (n.gender === "male" ? a + 1 : a),
-              0
-            ),
-            female: boardedCopy.reduce(
-              (a, n) => (n.gender === "female" ? a + 1 : a),
-              0
-            ),
-          })
-        );
+        // Add visualization data point for this stop
+        const genderData = {
+          stop: currentStop,
+          male: boarded.reduce((a, n) => (n.gender === "male" ? a + 1 : a), 0),
+          female: boarded.reduce(
+            (a, n) => (n.gender === "female" ? a + 1 : a),
+            0
+          ),
+        };
 
-        // race
-        setRaceStack(
-          raceStack.concat({
-            stop: currentStop,
-            ...boardedCopy.reduce((acc, next) => {
-              acc[next.race] += 1;
-              return acc;
-            }, cloneDeep(C.emptyRaces)),
-          })
-        );
+        const raceData = {
+          stop: currentStop,
+          ...boarded.reduce((acc, next) => {
+            acc[next.race] += 1;
+            return acc;
+          }, cloneDeep(C.emptyRaces)),
+        };
 
-        // income
-        setIncomeStack(
-          incomeStack.concat({
-            stop: currentStop,
-            ...boardedCopy.reduce((acc, next) => {
-              acc[next.income] += 1;
-              return acc;
-            }, cloneDeep(C.emptyIncomes)),
-          })
-        );
+        const incomeData = {
+          stop: currentStop,
+          ...boarded.reduce((acc, next) => {
+            acc[next.income] += 1;
+            return acc;
+          }, cloneDeep(C.emptyIncomes)),
+        };
+
+        addDataPoint(genderData, raceData, incomeData);
 
         break;
+      }
       default:
         return;
     }
   }, [action]);
 
-  const updateState = (boardedCopy, totalCopy, newGridTrain) => {
-    setPeopleBoarded(boardedCopy);
-    setPeopleTotal(totalCopy);
-    setGridTrain(newGridTrain);
-  };
-
   const introduceTrain = () => {
     const map = d3.select("#map");
     const train = d3.select("#train");
 
-    map.transition().duration(1500).style("height", "55vh");
+    map.transition().duration(C.TRANSITION_DURATION).style("height", "55vh");
 
-    train.transition().duration(1500).style("height", "45vh");
+    train.transition().duration(C.TRANSITION_DURATION).style("height", "45vh");
 
     map.style("overflow-y", "hidden");
   };
@@ -186,19 +171,19 @@ function App() {
     // const outro = d3.select('#outro')
 
     setTimeout(() => {
-      map.transition().duration(1500).style("height", "0vh");
+      map.transition().duration(C.TRANSITION_DURATION).style("height", "0vh");
 
-      train.transition().duration(1500).style("height", "0vh");
+      train.transition().duration(C.TRANSITION_DURATION).style("height", "0vh");
 
       d3.select("#outro")
         .transition()
-        .duration(1500)
+        .duration(C.TRANSITION_DURATION)
         .style("height", "100vh")
         .on("end", () => {
           map.remove();
           train.remove();
         });
-    }, 200);
+    }, C.OUTRO_DELAY);
   };
 
   const moveFirstStep = () => {
@@ -208,28 +193,28 @@ function App() {
     setTimeout(() => {
       setCurrentStop(currentStop + 1);
       setIsMoving(false);
-    }, 2000);
+    }, C.FIRST_STOP_DURATION);
   };
 
   const noMoveMiddleSteps = () => {
     setIsMoving(true);
     setAction(C.egress);
-    setTimeout(() => setAction(C.board), 2850);
+    setTimeout(() => setAction(C.board), C.EGRESS_TO_BOARD_DELAY);
     setTimeout(() => {
       setCurrentStop(currentStop + 1);
       setIsMoving(false);
-    }, 5100);
+    }, C.NO_MOVE_TOTAL_DURATION);
   };
 
   const moveMiddleSteps = () => {
     setIsMoving(true);
     setAction(C.egress);
-    setTimeout(() => setAction(C.moveSeats), 2850);
-    setTimeout(() => setAction(C.board), 4100);
+    setTimeout(() => setAction(C.moveSeats), C.EGRESS_TO_MOVE_DELAY);
+    setTimeout(() => setAction(C.board), C.MOVE_TO_BOARD_DELAY);
     setTimeout(() => {
       setCurrentStop(currentStop + 1);
       setIsMoving(false);
-    }, 6500);
+    }, C.WITH_MOVE_TOTAL_DURATION);
   };
 
   const stepHandlers = {
@@ -240,12 +225,7 @@ function App() {
     showOutro,
   };
 
-  // scrolly
-  const onStepEnter = ({ data }) => {
-    setCurrentStepIndex(data);
-  };
-
-  if (windowSize.height < 920 || windowSize.width < 1436)
+  if (windowSize.height < C.MIN_SCREEN_HEIGHT || windowSize.width < C.MIN_SCREEN_WIDTH)
     return (
       <div
         style={{
@@ -267,7 +247,7 @@ function App() {
           Please visit this interactive web-based data visualization on a BIG
           screen
         </h2>
-        <p>(At least 1436 x 920)</p>
+        <p>(At least {C.MIN_SCREEN_WIDTH} x {C.MIN_SCREEN_HEIGHT})</p>
         <p>(You may need to make your window full screen, and hide your toolbar temporarily)</p>
         <h3>-Jeremy Odell ❤️</h3>
       </div>
